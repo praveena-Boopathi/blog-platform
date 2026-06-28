@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../utils/api';
 import { toast } from 'react-toastify';
 
 const EditPost = () => {
@@ -12,7 +12,7 @@ const EditPost = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const res = await axios.get(`/api/posts/${id}`);
+        const res = await API.get(`/api/posts/${id}`);
         setForm({ title: res.data.title, content: res.data.content, tags: res.data.tags.join(', ') });
       } catch {
         toast.error('Post not found');
@@ -29,7 +29,7 @@ const EditPost = () => {
     setLoading(true);
     try {
       const tags = form.tags.split(',').map(t => t.trim()).filter(Boolean);
-      await axios.put(`/api/posts/${id}`, { ...form, tags });
+      await API.put(`/api/posts/${id}`, { ...form, tags });
       toast.success('Post updated!');
       navigate(`/post/${id}`);
     } catch (err) {

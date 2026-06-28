@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../utils/api';
 import { toast } from 'react-toastify';
 import { useAuth } from '../context/AuthContext';
 
@@ -17,8 +17,8 @@ const PostDetail = () => {
     const fetchData = async () => {
       try {
         const [postRes, commentsRes] = await Promise.all([
-          axios.get(`/api/posts/${id}`),
-          axios.get(`/api/comments/post/${id}`)
+          API.get(`/api/posts/${id}`),
+          API.get(`/api/comments/post/${id}`)
         ]);
         setPost(postRes.data);
         setComments(commentsRes.data);
@@ -35,7 +35,7 @@ const PostDetail = () => {
   const handleDelete = async () => {
     if (!window.confirm('Delete this post?')) return;
     try {
-      await axios.delete(`/api/posts/${id}`);
+      await API.delete(`/api/posts/${id}`);
       toast.success('Post deleted');
       navigate('/');
     } catch {
@@ -47,7 +47,7 @@ const PostDetail = () => {
     e.preventDefault();
     if (!newComment.trim()) return;
     try {
-      const res = await axios.post('/api/comments', { content: newComment, postId: id });
+      const res = await API.post('/api/comments', { content: newComment, postId: id });
       setComments([res.data, ...comments]);
       setNewComment('');
       toast.success('Comment added!');
@@ -58,7 +58,7 @@ const PostDetail = () => {
 
   const handleDeleteComment = async (commentId) => {
     try {
-      await axios.delete(`/api/comments/${commentId}`);
+      await API.delete(`/api/comments/${commentId}`);
       setComments(comments.filter(c => c._id !== commentId));
     } catch {
       toast.error('Failed to delete comment');

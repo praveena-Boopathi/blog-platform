@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import API from '../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 
@@ -11,7 +11,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchPosts = async () => {
       try {
-        const res = await axios.get('/api/posts');
+        const res = await API.get('/api/posts');
         setMyPosts(res.data.filter(p => p.author?._id === user?._id));
       } catch (err) {
         console.error(err);

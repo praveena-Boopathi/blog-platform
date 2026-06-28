@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import API from '../utils/api';
 import { toast } from 'react-toastify';
 
 const CreatePost = () => {
@@ -15,7 +15,7 @@ const CreatePost = () => {
     setLoading(true);
     try {
       const tags = form.tags.split(',').map(t => t.trim()).filter(Boolean);
-      const res = await axios.post('/api/posts', { ...form, tags });
+      const res = await API.post('/api/posts', { ...form, tags });
       toast.success('Post created!');
       navigate(`/post/${res.data._id}`);
     } catch (err) {
